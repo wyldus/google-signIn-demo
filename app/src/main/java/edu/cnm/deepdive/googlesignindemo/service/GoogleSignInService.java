@@ -72,6 +72,7 @@ public class GoogleSignInService {
     return task;
   }
 
+  //sign out method
   public Task<Void> signOut(){
     return client.signOut()
         .addOnCompleteListener((ignored)-> account = null);
