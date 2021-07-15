@@ -16,7 +16,7 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:flow_verticalBias=""
+    app:layout_constraintVertical_bias=".4"
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
