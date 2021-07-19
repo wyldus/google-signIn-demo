@@ -2,6 +2,15 @@ plugins {
     id 'com.android.application'
 }
 
+static def getProperty(String filename, String property){
+    Properties properties = new Properties();
+    properties.load(new FileInputStream(filename))
+    return properties.getProperty(property)
+}
+static def quoted(String value){
+    return "\"${value}\""
+}
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -14,6 +23,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def connection_properties = "$projectDir/../../../services/security.properties"
+        buildConfigField "String", "CLIENT_ID", quoted(getProperty(connection_properties, "client_id"))
     }
 
     buildTypes {
