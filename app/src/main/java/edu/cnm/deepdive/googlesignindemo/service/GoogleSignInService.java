@@ -11,6 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import edu.cnm.deepdive.googlesignindemo.BuildConfig;
+import io.reactivex.Single;
 
 public class GoogleSignInService {
 
@@ -28,33 +29,27 @@ public class GoogleSignInService {
         .requestIdToken(BuildConfig.CLIENT_ID)
         .build();
     client = GoogleSignIn.getClient(context, options);
-
   }
 
   public static void setContext(Application context) {
     GoogleSignInService.context = context;
   }
 
-
   public static GoogleSignInService getInstance() {
     return InstanceHolder.INSTANCE;
-  }
-
-  public static Application getContext() {
-    return context;
-  }
-
-  public GoogleSignInClient getClient() {
-    return client;
   }
 
   public GoogleSignInAccount getAccount() {
     return account;
   }
 
-  public Task<GoogleSignInAccount> refresh() {
-    return client.silentSignIn()
-        .addOnSuccessListener(this::setAccount);
+  public Single<GoogleSignInAccount> refresh() {
+    return Single.create((emitter) ->
+        client.silentSignIn()
+            .addOnSuccessListener(this::setAccount)
+            .addOnSuccessListener(emitter::onSuccess)
+            .addOnFailureListener(emitter::onError)
+    );
   }
 
   public void startSignIn(Activity activity, int requestCode) {
@@ -69,12 +64,11 @@ public class GoogleSignInService {
       task = GoogleSignIn.getSignedInAccountFromIntent(data);
       setAccount(task.getResult(ApiException.class));
     } catch (ApiException e) {
-// Exception will be passed automatically to onFailureListener
+      // Exception will be passed automatically to onFailureListener.
     }
     return task;
   }
 
-  //sign out method
   public Task<Void> signOut() {
     return client.signOut()
         .addOnCompleteListener((ignored) -> setAccount(null));
@@ -82,7 +76,7 @@ public class GoogleSignInService {
 
   private void setAccount(GoogleSignInAccount account) {
     this.account = account;
-    if (account != null) {
+    if(account != null) {
       Log.d(getClass().getSimpleName(), account.getIdToken());
     }
   }
@@ -92,5 +86,6 @@ public class GoogleSignInService {
     private static final GoogleSignInService INSTANCE = new GoogleSignInService();
 
   }
-}
 
+
+}
