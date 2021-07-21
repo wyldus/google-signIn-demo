@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
               setContentView(binding.getRoot());
             });
   }
-
+  //Wrong Log In Credential
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     if (requestCode == LOGIN_REQUEST_CODE) {
