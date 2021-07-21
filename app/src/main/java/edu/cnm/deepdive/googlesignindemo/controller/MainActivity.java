@@ -2,18 +2,18 @@ package edu.cnm.deepdive.googlesignindemo.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.view.View;
-
 import android.view.Menu;
 import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import edu.cnm.deepdive.googlesignindemo.R;
 import edu.cnm.deepdive.googlesignindemo.service.GoogleSignInService;
+import edu.cnm.deepdive.googlesignindemo.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
+
+  private MainViewModel viewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -22,14 +22,8 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    FloatingActionButton fab = findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show();
-      }
-    });
+    viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
   }
 
   @Override
@@ -43,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
 
     boolean handled = true;
+
     switch (item.getItemId()) {
       case R.id.sign_out:
         logout();
